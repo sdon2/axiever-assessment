@@ -100,13 +100,22 @@
                     <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu"
                         data-accordion="false">
                         <li class="nav-item">
-                            <a href="{{ url('/products') }}" class="nav-link">
+                            <a href="{{ url('/dashboard') }}"
+                                class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-boxes"></i>
+                                <p>Dashboard</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('/products') }}"
+                                class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-boxes"></i>
                                 <p>Products</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('/orders') }}" class="nav-link">
+                            <a href="{{ url('/orders') }}"
+                                class="nav-link {{ request()->routeIs('orders.*') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-basket"></i>
                                 <p>Orders</p>
                             </a>
@@ -119,7 +128,33 @@
         </aside>
         <!--end::Sidebar-->
         <!--begin::App Main-->
-        {{ $slot }}
+        <main class="app-main">
+            <!--begin::App Content Header-->
+            <div class="app-content-header">
+                <!--begin::Container-->
+                <div class="container-fluid">
+                    <!--begin::Row-->
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3 class="mb-0">@yield('title')</h3>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-end">
+                                <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">@yield('title')</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <!--end::Row-->
+                </div>
+                <!--end::Container-->
+            </div>
+            <!--end::App Content Header-->
+
+            @include('partials.message')
+
+            {{ $slot }}
+        </main>
         <!--end::App Main-->
         <!--begin::Footer-->
         <footer class="app-footer">
