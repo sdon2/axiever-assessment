@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\ProductsDataTable;
-use App\Http\Requests\ProductCreateRequest;
-use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -45,9 +43,17 @@ class ProductController extends Controller
         return view('products.create');
     }
 
-    public function store(ProductCreateRequest $request)
+    public function store(Request $request)
     {
-        Product::create($request->validated());
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'sku' => ['required', 'string', 'max:100', 'unique:products,sku'],
+            'price' => ['required', 'numeric', 'min:0'],
+            'stock' => ['required', 'integer', 'min:0'],
+        ]);
+
+        Product::create($data);
 
         return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
@@ -57,9 +63,17 @@ class ProductController extends Controller
         return view('products.edit', compact('product'));
     }
 
-    public function update(ProductUpdateRequest $request, Product $product)
+    public function update(Request $request, Product $product)
     {
-        $product->update($request->validated());
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'sku' => ['required', 'string', 'max:100', 'unique:products,sku,' . $product->id],
+            'price' => ['required', 'numeric', 'min:0'],
+            'stock' => ['required', 'integer', 'min:0'],
+        ]);
+
+        $product->update($data);
 
         return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }

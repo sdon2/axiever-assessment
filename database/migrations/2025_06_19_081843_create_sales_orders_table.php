@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('customer_name');
             $table->date('order_date');
             $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
+            $table->foreignId('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
