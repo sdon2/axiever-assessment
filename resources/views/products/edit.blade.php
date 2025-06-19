@@ -47,9 +47,9 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="stock" class="form-label">Opening Stock</label>
+                                    <label for="stock" class="form-label">Current Stock</label>
                                     <input type="text" class="form-control" id="stock" name="stock"
-                                        value="{{ old('stock', $product->stock) }}">
+                                        value="{{ old('stock', $product->stock) }}" required>
                                     @error('stock')
                                         <div class="is-invalid text-danger">{{ $message }}</div>
                                     @enderror
