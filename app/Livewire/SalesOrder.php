@@ -30,7 +30,7 @@ class SalesOrder extends Component
             $this->order_date    = $salesOrder->order_date;
             $this->customer_name = $salesOrder->customer_name;
 
-            $this->status        = $salesOrder->status;
+            $this->status = $salesOrder->status;
 
             $this->orderProducts = collect($salesOrder->products)->map(function ($product) {
                 return [
@@ -55,17 +55,19 @@ class SalesOrder extends Component
         $this->products = Product::query()->orderBy('name')->get(); // Fetch or set your products here
     }
 
+    public static $rules = [
+        'order_date'                 => ['required', 'date_format:Y-m-d'],
+        'customer_name'              => ['required', 'string', 'max:255'],
+        'orderProducts'              => ['required', 'array'],
+        'status'                     => ['required', 'in:completed,cancelled'],
+        'orderProducts.*.product_id' => ['required', 'integer', 'exists:products,id'],
+        'orderProducts.*.quantity'   => ['required', 'numeric', 'min:1'],
+        'orderProducts.*.price'      => ['required', 'numeric', 'min:1'],
+    ];
+
     public function rules()
     {
-        return [
-            'order_date'                 => ['required', 'date_format:Y-m-d'],
-            'customer_name'              => ['required', 'string', 'max:255'],
-            'orderProducts'              => ['required', 'array'],
-            'status'                     => ['required', 'in:completed,cancelled'],
-            'orderProducts.*.product_id' => ['required', 'integer', 'exists:products,id'],
-            'orderProducts.*.quantity'   => ['required', 'numeric', 'min:1'],
-            'orderProducts.*.price'      => ['required', 'numeric', 'min:1'],
-        ];
+        return self::$rules;
     }
 
     protected function validationAttributes()
