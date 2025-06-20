@@ -26,11 +26,7 @@ class SalesOrder extends Component
         $this->viewMode = $viewMode;
 
         if ($salesOrder) {
-            $this->id            = $salesOrder->id;
-            $this->order_date    = $salesOrder->order_date;
-            $this->customer_name = $salesOrder->customer_name;
-
-            $this->status = $salesOrder->status;
+            $this->fill($salesOrder->only(array_keys($this->rules())));
 
             $this->orderProducts = collect($salesOrder->products)->map(function ($product) {
                 return [
@@ -55,19 +51,18 @@ class SalesOrder extends Component
         $this->products = Product::query()->orderBy('name')->get(); // Fetch or set your products here
     }
 
-    public static $rules = [
-        'order_date'                 => ['required', 'date_format:Y-m-d'],
-        'customer_name'              => ['required', 'string', 'max:255'],
-        'orderProducts'              => ['required', 'array'],
-        'status'                     => ['required', 'in:completed,cancelled'],
-        'orderProducts.*.product_id' => ['required', 'integer', 'exists:products,id'],
-        'orderProducts.*.quantity'   => ['required', 'numeric', 'min:1'],
-        'orderProducts.*.price'      => ['required', 'numeric', 'min:1'],
-    ];
-
-    public function rules()
+    protected function rules()
     {
-        return self::$rules;
+        return [
+            'id'                         => 'nullable',
+            'order_date'                 => ['required', 'date_format:Y-m-d'],
+            'customer_name'              => ['required', 'string', 'max:255'],
+            'orderProducts'              => ['required', 'array'],
+            'status'                     => ['nullable', 'in:completed,cancelled'],
+            'orderProducts.*.product_id' => ['required', 'integer', 'exists:products,id'],
+            'orderProducts.*.quantity'   => ['required', 'numeric', 'min:1'],
+            'orderProducts.*.price'      => ['required', 'numeric', 'min:1'],
+        ];
     }
 
     protected function validationAttributes()
@@ -84,10 +79,11 @@ class SalesOrder extends Component
 
     public function save()
     {
-        $data = $this->validate();
-
         // Logic to store the sales order
         try {
+
+            $data = $this->validate();
+
             DB::beginTransaction();
 
             $salesOrderData               = collect($data)->only(['order_date', 'customer_name', 'status'])->toArray();
@@ -108,6 +104,7 @@ class SalesOrder extends Component
                 }
 
             } else {
+                $salesOrderData['status'] = 'pending'; // Default status
                 $salesOrder = SalesOrderModel::create($salesOrderData);
             }
 
