@@ -1,5 +1,5 @@
 Installation Instructions:
-1. Clone repo using git command `git clone https://github.com/sdon2/axiever.git`
+1. Clone repo using git command `git clone https://github.com/sdon2/axiever-assessment.git`
 2. Install composer dependencies using command `composer install`
 3. Copy `.env.example` file in the root directory and save it as `.env`
 4. Run command `php artisan key:generate` to set application key
