@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SalesOrderController;
+use App\Livewire\SalesOrder;
+use App\Models\Product;
+use App\Models\SalesOrder as SalesOrderModel;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -9,7 +12,17 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $is_admin = auth()->user()->role == 'admin';
+    $total_sales_count = $is_admin ? SalesOrderModel::query()->where('status', 'completed')->count() : SalesOrderModel::query()->where('status', 'completed')->where('created_by', auth()->user()->id)->count();
+    $total_sales_amount = $is_admin ? SalesOrderModel::query()->where('status', 'completed')->get()->sum('total_amount') : SalesOrderModel::query()->where('status', 'completed')->where('created_by', auth()->user()->id)->get()->sum('total_amount');
+    $total_products_count = Product::query()->count();
+    $total_product_stock = Product::query()->sum('stock');
+    return view('dashboard', [
+        'total_sales_count' => $total_sales_count,
+        'total_sales_amount' => $total_sales_amount,
+        'total_products_count' => $total_products_count,
+        'total_product_stock' => $total_product_stock,
+    ]);
 })->middleware(['auth:sanctum'])->name('dashboard');
 
 Route::group(['middleware' => ['auth:sanctum'], 'as' => 'products.', 'prefix' => '/products'], function () {

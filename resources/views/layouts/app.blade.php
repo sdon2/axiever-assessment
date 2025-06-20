@@ -106,13 +106,15 @@
                                 <p>Dashboard</p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="{{ url('/products') }}"
-                                class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}">
-                                <i class="nav-icon bi bi-boxes"></i>
-                                <p>Products</p>
-                            </a>
-                        </li>
+                        @if (auth()->user()->role === 'admin')
+                            <li class="nav-item">
+                                <a href="{{ url('/products') }}"
+                                    class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}">
+                                    <i class="nav-icon bi bi-boxes"></i>
+                                    <p>Products</p>
+                                </a>
+                            </li>
+                        @endif
                         <li class="nav-item">
                             <a href="{{ url('/salesOrders') }}"
                                 class="nav-link {{ request()->routeIs('salesOrders.*') ? 'active' : '' }}">

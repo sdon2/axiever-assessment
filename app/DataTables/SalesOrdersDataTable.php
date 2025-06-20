@@ -33,7 +33,10 @@ class SalesOrdersDataTable extends DataTable
      */
     public function query(SalesOrder $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()
+            ->when(auth()->user()->role == 'sales_person', function ($query) {
+                return $query->where('created_by', auth()->user()->id);
+            });
     }
 
     /**
