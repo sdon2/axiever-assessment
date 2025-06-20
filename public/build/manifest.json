@@ -1,0 +1,19 @@
+{
+  "resources/js/app.js": {
+    "file": "assets/app-BM2c9Uc1.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/scss/adminlte.scss": {
+    "file": "assets/adminlte-C1lnhFtZ.css",
+    "src": "resources/scss/adminlte.scss",
+    "isEntry": true
+  },
+  "resources/ts/adminlte.ts": {
+    "file": "assets/adminlte-CyYJ688h.js",
+    "name": "adminlte",
+    "src": "resources/ts/adminlte.ts",
+    "isEntry": true
+  }
+}
