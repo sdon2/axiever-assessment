@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\SalesOrdersDataTable;
 use App\Models\SalesOrder;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -62,6 +63,12 @@ class SalesOrderController extends Controller
     public function edit(SalesOrder $salesOrder)
     {
         return view('salesOrders.edit', compact('salesOrder'));
+    }
+
+    public function download(SalesOrder $salesOrder)
+    {
+        $pdf = Pdf::loadView('salesOrders.download', compact('salesOrder'));
+        return $pdf->stream('Sales-Order-' . $salesOrder->id . '.pdf');
     }
 
     public function destroy(SalesOrder $salesOrder)

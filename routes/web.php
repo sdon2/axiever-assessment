@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth:sanctum'], 'as' => 'salesOrders.', 'prefix'
     Route::get('/create', [SalesOrderController::class, 'create'])->name('create');
     Route::post('', [SalesOrderController::class, 'store'])->name('store');
     Route::get('/{salesOrder}', [SalesOrderController::class, 'show'])->name('show');
+    Route::get('/{salesOrder}/download', [SalesOrderController::class, 'download'])->name('download');
     Route::get('/{salesOrder}/edit', [SalesOrderController::class, 'edit'])->name('edit');
     Route::put('/{salesOrder}', [SalesOrderController::class, 'update'])->name('update');
     Route::delete('/{salesOrder}', [SalesOrderController::class, 'destroy'])->name('destroy');
