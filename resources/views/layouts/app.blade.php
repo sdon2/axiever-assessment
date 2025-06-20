@@ -114,10 +114,10 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('/orders') }}"
-                                class="nav-link {{ request()->routeIs('orders.*') ? 'active' : '' }}">
+                            <a href="{{ url('/salesOrders') }}"
+                                class="nav-link {{ request()->routeIs('salesOrders.*') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-basket"></i>
-                                <p>Orders</p>
+                                <p>Sales Orders</p>
                             </a>
                         </li>
                     </ul>
