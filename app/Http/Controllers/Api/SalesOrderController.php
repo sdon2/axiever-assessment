@@ -2,7 +2,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Livewire\SalesOrder as SalesOrderLivewire;
 use App\Models\SalesOrder;
 use App\Models\SalesOrderProduct;
 use Exception;
@@ -20,9 +19,15 @@ class SalesOrderController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate(
-            SalesOrderLivewire::$rules
-        );
+        $data = $request->validate([
+            'order_date'                 => ['required', 'date_format:Y-m-d'],
+            'customer_name'              => ['required', 'string', 'max:255'],
+            'orderProducts'              => ['required', 'array'],
+            'status'                     => ['nullable', 'in:completed,cancelled'],
+            'orderProducts.*.product_id' => ['required', 'integer', 'exists:products,id'],
+            'orderProducts.*.quantity'   => ['required', 'numeric', 'min:1'],
+            'orderProducts.*.price'      => ['required', 'numeric', 'min:1'],
+        ]);
 
         // Logic to store the sales order
         try {
